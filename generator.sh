@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 echo "What do you want your project to be called?"
 read project_name
 
@@ -41,7 +43,7 @@ while true; do
 done
 
 # replace "com.mobify.astro" with $bundle_identifier inside of files
-egrep -lR "com\.mobify\.astro" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/com\.mobify\.astro/$bundle_identifier/g"  
+/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $bundle_identifier" ios/$project_name/$project_name/Info.plist 
 
 # replace "scaffold" with $project_name inside of files
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g"  
