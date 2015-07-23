@@ -9,7 +9,7 @@ read project_name
 project_name=$(echo $project_name | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
 
 # ask them to confirm the project name
-read -p "The project name is $project_name. Would you like to proceed? (y/n) " -n 1 -r
+read -p "The project name is \"$project_name\". Would you like to proceed? (y/n) " -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
@@ -17,7 +17,7 @@ then
 fi
 
 # ask them for the app scheme
-echo "What app scheme do you want for deep linking into your iOS app?"
+echo "What app scheme do you want for deep linking into your iOS app? (ex: facebook://, but don't include the ://)"
 read app_scheme
 
 # ask for the bundle identifier 
@@ -43,10 +43,10 @@ while true; do
 done
 
 # replace "com.mobify.astro" with $bundle_identifier inside of files
-/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $bundle_identifier" ios/$project_name/$project_name/Info.plist 
+egrep -lR "com\.mobify\.astro" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/com\.mobify\.astro/$bundle_identifier/g" 
 
 # replace "scaffold" with $project_name inside of files
-egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g"  
+egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null 
 
 # update submodule (this is done after replacing to
 # avoid doing replaces inside of the submodule!)
