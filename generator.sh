@@ -32,7 +32,7 @@ mkdir $project_name
 cd $project_name
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git@deeplinking-refactor --depth 1
+git pull git@github.com:mobify/astro-scaffold.git --depth 1
 
 # replace scaffold in the names of different files and folders with $project_name
 while true; do
