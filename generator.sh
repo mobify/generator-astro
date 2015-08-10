@@ -69,6 +69,8 @@ else
         rm circle/remove-ios-keys.sh
         rm circle/config/mobify-qa-ios
         sed -i '' '/^## IOS_BEGIN$/,/^## IOS_END$/d' circle.yml
+        rm -rf circle/certificates
+        rm -rf circle/provisioning-profiles
     fi
     if [ "$android_ci_support" -ne 1 ]; then
         rm circle/build-and-upload-android.sh
