@@ -75,6 +75,7 @@ else
     if [ "$android_ci_support" -ne 1 ]; then
         rm circle/build-and-upload-android.sh
         rm circle/install-android-dependencies.sh
+        rm circle/wait-for-emulator-android.sh
         rm circle/config/mobify-qa-android
         sed -i '' '/^## ANDROID_BEGIN$/,/^## ANDROID_END$/d' circle.yml
     fi
