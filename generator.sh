@@ -31,12 +31,12 @@ read bundle_identifier
 ios_ci_support=0
 android_ci_support=0
 
-read -p "Do you want CircleCI support?" -n 1 -r
+read -p "Do you want CircleCI support? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # if yes, inform user of Circle setup document
-    read -p "Do you want iOS CI support?" -n 1 -r
+    read -p "Do you want iOS CI support? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
@@ -44,7 +44,7 @@ then
         ios_ci_support=1
     fi
 
-    read -p "Do you want Android CI support?" -n 1 -r
+    read -p "Do you want Android CI support? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
