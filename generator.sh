@@ -6,7 +6,7 @@ echo "What do you want your project to be called?"
 read project_name
 
 # ensure the project name has no special characters
-project_name=$(echo $project_name | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
+project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
 
 # ask them to confirm the project name
 read -p "The project name is \"$project_name\". Would you like to proceed? (y/n) " -n 1 -r
@@ -53,8 +53,8 @@ then
     fi
 fi
 
-mkdir $project_name
-cd $project_name
+mkdir "$project_name"
+cd "$project_name" || exit
 
 git init
 git pull git@github.com:mobify/astro-scaffold.git --depth 1
@@ -88,7 +88,7 @@ while true; do
         echo "Done"
         break
     else
-        echo $FOLDER
+        echo "$FOLDER"
         mv -vf "$FOLDER" "${FOLDER/scaffold/$project_name}"
     fi
 done
