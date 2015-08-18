@@ -48,7 +48,7 @@ then
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-    echo "Please see the main README about setting up Android CI support"
+        echo "Please see the main README about setting up Android CI support"
         android_ci_support=1
     fi
 fi
