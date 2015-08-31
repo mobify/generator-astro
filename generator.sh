@@ -24,33 +24,28 @@ read app_scheme
 echo "What host would you like to override for deep linking into your Android app? (ex: www.example.com)"
 read hostname
 
-# ask for the bundle identifier 
+# ask for the bundle identifier
 echo "What Bundle Identifier would you like to use? (ex: com.yourcompany.yourapp)"
 read bundle_identifier
 
 ios_ci_support=0
 android_ci_support=0
 
-read -p "Do you want CircleCI support? (y/n) " -n 1 -r
+# if yes, inform user of Circle setup document
+read -p "Do you want iOS CI support? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    # if yes, inform user of Circle setup document
-    read -p "Do you want iOS CI support? (y/n) " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        echo "Please see the main README about setting up iOS CI support"
-        ios_ci_support=1
-    fi
+    echo "Please see the main README about setting up iOS CI support"
+    ios_ci_support=1
+fi
 
-    read -p "Do you want Android CI support? (y/n) " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        echo "Please see the main README about setting up Android CI support"
-        android_ci_support=1
-    fi
+read -p "Do you want Android CI support? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    echo "Please see the main README about setting up Android CI support"
+    android_ci_support=1
 fi
 
 mkdir "$project_name"
