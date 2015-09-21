@@ -25,7 +25,7 @@ echo "What host would you like to override for deep linking into your Android ap
 read hostname
 
 # ask for the bundle identifier
-echo "What Bundle Identifier would you like to use? (ex: com.yourcompany.yourapp)"
+echo "What Bundle Identifier would you like to use? (ex: com.yourcompany.yourapp - if you want Mobify projects to work out of the box with hockeyapp, it must start with "com.mobify.")"
 read bundle_identifier
 
 ios_ci_support=0
