@@ -113,4 +113,4 @@ cd astro
 git checkout $commit
 cd ..
 git add .
-git commit -am "Initial commit"
+git commit -am "Your first Astro commit - AMAZING! 🌟 👍🏽"
