@@ -59,3 +59,16 @@ egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$proj
 # update submodule (this is done after replacing to
 # avoid doing replaces inside of the submodule!)
 git submodule update --init
+
+# grab the commit ref for that submodule
+commit=$(git ls-tree master | grep astro | awk '{ print $3; }')
+
+# blow away the astro submodule, and the history, then re-initialize git
+rm -rf .git astro
+git init
+git submodule add -f git@github.com:mobify/astro.git astro
+cd astro
+git checkout $commit
+cd ..
+git add .
+git commit -am "Initial commit"
