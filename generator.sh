@@ -24,8 +24,8 @@ read app_scheme
 echo "What host would you like to override for deep linking into your Android app? (ex: www.example.com)"
 read hostname
 
-# ask for the bundle identifier
-echo "What Bundle Identifier would you like to use? (ex: com.yourcompany.yourapp - if you want Mobify projects to work out of the box with hockeyapp, it must start with "com.mobify.")"
+# ask for the bundle identifier / package name
+echo "What Bundle Identifier (iOS) / Package Name (Android) would you like to use? (ex: com.yourcompany.yourapp - if you want Mobify projects to work out of the box with hockeyapp, it must start with "com.mobify.")"
 read bundle_identifier
 
 ios_ci_support=0
