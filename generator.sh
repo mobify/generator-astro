@@ -6,7 +6,7 @@ echo "What do you want your project to be called?"
 read project_name
 
 # ensure the project name has no special characters
-project_name=$(echo $project_name | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
+project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
 
 # ask them to confirm the project name
 read -p "The project name is \"$project_name\". Would you like to proceed? (y/n) " -n 1 -r
@@ -24,15 +24,57 @@ read app_scheme
 echo "What host would you like to override for deep linking into your Android app? (ex: www.example.com)"
 read hostname
 
-# ask for the bundle identifier 
-echo "What Bundle Identifier would you like to use? (ex: com.yourcompany.yourapp)"
+# ask for the bundle identifier / package name
+echo "What Bundle Identifier (iOS) / Package Name (Android) would you like to use? (ex: com.yourcompany.yourapp - if you want Mobify projects to work out of the box with hockeyapp, it must start with "com.mobify.")"
 read bundle_identifier
 
-mkdir $project_name
-cd $project_name
+ios_ci_support=0
+android_ci_support=0
+
+# if yes, inform user of Circle setup document
+read -p "Do you want iOS CI support? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    echo "Please see the main README about setting up iOS CI support"
+    ios_ci_support=1
+fi
+
+read -p "Do you want Android CI support? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    echo "Please see the main README about setting up Android CI support"
+    android_ci_support=1
+fi
+
+mkdir "$project_name"
+cd "$project_name" || exit
 
 git init
 git pull git@github.com:mobify/astro-scaffold.git --depth 1
+
+if [[ "$ios_ci_support" -ne 1 && "$android_ci_support" -ne 1 ]]; then
+    rm -rf circle.yml
+    rm -rf circle
+else
+    if [ "$ios_ci_support" -ne 1 ]; then
+        rm circle/add-ios-keys.sh
+        rm circle/build-and-upload-ios.sh
+        rm circle/remove-ios-keys.sh
+        rm circle/config/mobify-qa-ios
+        sed -i '' '/^## IOS_BEGIN$/,/^## IOS_END$/d' circle.yml
+        rm -rf circle/certificates
+        rm -rf circle/provisioning-profiles
+    fi
+    if [ "$android_ci_support" -ne 1 ]; then
+        rm circle/build-and-upload-android.sh
+        rm circle/install-android-dependencies.sh
+        rm circle/wait-for-emulator-android.sh
+        rm circle/config/mobify-qa-android
+        sed -i '' '/^## ANDROID_BEGIN$/,/^## ANDROID_END$/d' circle.yml
+    fi
+fi
 
 # replace scaffold in the names of different files and folders with $project_name
 while true; do
@@ -41,7 +83,7 @@ while true; do
         echo "Done"
         break
     else
-        echo $FOLDER
+        echo "$FOLDER"
         mv -vf "$FOLDER" "${FOLDER/scaffold/$project_name}"
     fi
 done
