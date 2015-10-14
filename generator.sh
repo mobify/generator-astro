@@ -52,7 +52,7 @@ mkdir "$project_name"
 cd "$project_name" || exit
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git --depth 1
+git pull git@github.com:mobify/astro-scaffold.git hyb-500-update-scaffold-basic-ecommerce-functionality --depth 1
 
 if [[ "$ios_ci_support" -ne 1 && "$android_ci_support" -ne 1 ]]; then
     rm -rf circle.yml
@@ -96,7 +96,7 @@ egrep -lR "com\.mobify\.astro" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/com\
 egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/android:host=\"www.mobify.com\"/android:host=\"$hostname\"/g" 2>/dev/null
 
 # replace "scaffold" with $project_name inside of files
-egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null 
+egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
 
 # update submodule (this is done after replacing to
 # avoid doing replaces inside of the submodule!)
