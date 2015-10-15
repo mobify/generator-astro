@@ -37,7 +37,7 @@ mkdir $project_name
 cd $project_name || exit
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git hyb-500-update-scaffold-basic-ecommerce-functionality --depth 1
+git pull git@github.com:mobify/astro-scaffold.git --depth 1
 
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     rm -rf circle.yml
