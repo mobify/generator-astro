@@ -16,4 +16,4 @@ bash <(curl -fsS https://raw.githubusercontent.com/mobify/generator-astro/master
 Why `generator-astro` and not `astro-generator`
 -----------------------------------------------
 
-Initially we envisioned using (Yeoman)[http://yeoman.io/] for the generator. Yeoman generators are prefixed with `generator-` and so we followed that convention. 
+Initially we envisioned using [Yeoman](http://yeoman.io/) for the generator. Yeoman generators are prefixed with `generator-` and so we followed that convention. 
