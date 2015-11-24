@@ -37,7 +37,7 @@ mkdir $project_name
 cd $project_name || exit
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git --depth 1
+git pull git@github.com:mobify/astro-scaffold.git 0.5.0 --depth 1
 
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     rm -rf circle.yml
@@ -89,7 +89,7 @@ commit=$(git ls-tree master | grep astro | awk '{ print $3; }')
 # Blow away the astro submodule, and the history, then re-initialize git
 rm -rf .git astro
 git init
-git submodule add --depth 1 --force git@github.com:mobify/astro.git astro
+git submodule add --force git@github.com:mobify/astro.git astro
 cd astro
 git checkout $commit
 cd ..
