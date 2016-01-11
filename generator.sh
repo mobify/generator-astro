@@ -37,7 +37,7 @@ mkdir $project_name
 cd $project_name || exit
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git 0.5.0 --depth 1
+git pull git@github.com:mobify/astro-scaffold.git 0.6.0 --depth 1
 
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     rm -rf circle.yml
@@ -82,6 +82,9 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 
 # Replace "scaffold" with $project_name inside of files.
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
+
+# Update symlink to "scaffold-www" folder in android/assets
+ln -sfn ../../../../../app/$project_name-www/ android/$project_name/src/main/assets/$project_name-www
 
 # Grab the commit ref for that submodule.
 commit=$(git ls-tree master | grep astro | awk '{ print $3; }')
