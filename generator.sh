@@ -37,7 +37,7 @@ mkdir $project_name
 cd $project_name || exit
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git 0.6.0 --depth 1
+git pull git@github.com:mobify/astro-scaffold.git astro-on-npm --depth 1
 
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     rm -rf circle.yml
@@ -86,15 +86,6 @@ egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$proj
 # Update symlink to "scaffold-www" folder in android/assets
 ln -sfn ../../../../../app/$project_name-www/ android/$project_name/src/main/assets/$project_name-www
 
-# Grab the commit ref for that submodule.
-commit=$(git ls-tree master | grep astro | awk '{ print $3; }')
-
-# Blow away the astro submodule, and the history, then re-initialize git
-rm -rf .git astro
 git init
-git submodule add --force git@github.com:mobify/astro.git astro
-cd astro
-git checkout $commit
-cd ..
 git add .
 git commit -am 'Your first Astro commit - AMAZING! 🌟 👍🏽'
