@@ -89,3 +89,4 @@ ln -sfn ../../../../../app/$project_name-www/ android/$project_name/src/main/ass
 git init
 git add .
 git commit -am 'Your first Astro commit - AMAZING! 🌟 👍🏽'
+npm install
