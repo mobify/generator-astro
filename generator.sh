@@ -51,7 +51,7 @@ mkdir $project_name
 cd $project_name || exit
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git astro-on-npm --depth 1
+git pull git@github.com:mobify/astro-scaffold.git 0.7.0 --depth 1
 
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     rm -rf circle.yml
