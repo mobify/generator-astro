@@ -1,6 +1,21 @@
 #!/bin/bash
 set -o pipefail
 
+read -p"--> We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+    exit 1
+fi
+
+# TODO: only download if necessary
+curl -s -H 'Accept: application/vnd.github.v3.raw' -O -L https://api.github.com/repos/mobify/astro-scaffold/contents/LICENSE
+less LICENSE
+
+read -p"--> I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+    exit 1
+fi
 
 read -p'--> What is the name of your project? ' project_name
 # $project_name must not contain special characters.
