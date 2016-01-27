@@ -7,9 +7,8 @@ if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
 fi
 
-# TODO: only download if necessary
-curl -s -H 'Accept: application/vnd.github.v3.raw' -O -L https://api.github.com/repos/mobify/astro-scaffold/contents/LICENSE
-less LICENSE
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+less $script_dir/LICENSE
 
 read -p"--> I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
 echo
