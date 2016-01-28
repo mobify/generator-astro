@@ -1,6 +1,9 @@
 #!/bin/bash
 set -o pipefail
 
+MYDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+ROOT=$MYDIR
+
 ASTRO_VERSION=0.7.0
 SCAFFOLD_VERSION=$ASTRO_VERSION
 SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION.zip"
@@ -53,8 +56,9 @@ if [[ $REPLY =~ ^[Yy]$ ]] ; then
 fi
 
 # Prepare new project directory
-mkdir $project_name
-cd $project_name || exit
+project_dir="$ROOT/$project_name"
+mkdir "$project_dir"
+cd "$project_dir" || exit
 git init
 
 set -x
@@ -64,7 +68,7 @@ echo "Working directory: $WORKING_DIR"
 trap 'rm -rf "$WORKING_DIR"' EXIT
 curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
 unzip "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip" -d "$WORKING_DIR"
-cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION" .
+cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION" "$project_dir"
 set +x
 
 # Set up CI support
