@@ -51,7 +51,7 @@ fi
 read -p "--> On Android, do you want continuous integration? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    echo '   ↳ To setup Android continuous integration, see README.md.'
+    echo '    ↳ To setup Android continuous integration, see README.md.'
     android_ci_support=1
 fi
 
@@ -68,8 +68,11 @@ WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
 echo "Working directory: $WORKING_DIR"
 trap 'rm -rf "$WORKING_DIR"' EXIT
 curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
-unzip "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip" -d "$WORKING_DIR"
+cd $WORKING_DIR || exit
+unzip "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
 cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION" "$project_dir"
+
+cd "$project_dir"
 set +x
 
 # Set up CI support
