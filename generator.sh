@@ -1,6 +1,10 @@
 #!/bin/bash
 set -o pipefail
 
+ASTRO_VERSION=0.7.0
+SCAFFOLD_VERSION=$ASTRO_VERSION
+SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION.zip"
+
 read -p"--> We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
@@ -48,12 +52,19 @@ if [[ $REPLY =~ ^[Yy]$ ]] ; then
     android_ci_support=1
 fi
 
+# Prepare new project directory
 mkdir $project_name
 cd $project_name || exit
-
 git init
-git pull git@github.com:mobify/astro-scaffold.git 0.7.0 --depth 1
 
+# Download the scaffold and copy it into the project directory
+WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
+trap 'rm -rf "$WORKING_DIR"' EXIT
+curl -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
+unzip "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
+cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION/*" .
+
+# Set up CI support
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     rm -rf circle.yml
     rm -rf circle
