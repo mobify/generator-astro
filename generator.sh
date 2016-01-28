@@ -44,19 +44,20 @@ android_ci_support=0
 read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    echo 'To setup iOS continuous integration, see README.md.'
+    echo '        ↳ To setup iOS continuous integration, see README.md.'
     ios_ci_support=1
 fi
 
 read -p "--> On Android, do you want continuous integration? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    echo 'To setup Android continuous integration, see README.md.'
+    echo '       ↳ To setup Android continuous integration, see README.md.'
     android_ci_support=1
 fi
 
 # Prepare new project directory
 project_dir="$ROOT/$project_name"
+echo "Setting up new project in $project_dir"
 mkdir "$project_dir"
 cd "$project_dir" || exit
 git init
