@@ -7,8 +7,9 @@ if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
 fi
 
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-less $script_dir/LICENSE
+curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/develop/LICENSE
+less LICENSE
+rm LICENSE
 
 read -p"--> I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
 echo
