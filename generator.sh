@@ -1,8 +1,8 @@
 #!/bin/bash
 set -o pipefail
 
-MYDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-ROOT=$MYDIR
+MYDIR=$(pwd)
+ROOT=$MYDIR # In some scripts ROOT != MYDIR
 
 ASTRO_VERSION=0.7.0
 SCAFFOLD_VERSION=$ASTRO_VERSION
@@ -44,14 +44,14 @@ android_ci_support=0
 read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    echo '        ↳ To setup iOS continuous integration, see README.md.'
+    echo '    ↳ To setup iOS continuous integration, see README.md.'
     ios_ci_support=1
 fi
 
 read -p "--> On Android, do you want continuous integration? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    echo '       ↳ To setup Android continuous integration, see README.md.'
+    echo '   ↳ To setup Android continuous integration, see README.md.'
     android_ci_support=1
 fi
 
