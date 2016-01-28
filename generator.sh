@@ -8,8 +8,8 @@ if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
 fi
 
 curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/develop/LICENSE
+trap 'rm -f LICENSE' EXIT
 less LICENSE
-rm LICENSE
 
 read -p"--> I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
 echo
