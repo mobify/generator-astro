@@ -1,6 +1,20 @@
 #!/bin/bash
 set -o pipefail
 
+read -p"--> We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+    exit 1
+fi
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+less $script_dir/LICENSE
+
+read -p"--> I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+    exit 1
+fi
 
 read -p'--> What is the name of your project? ' project_name
 # $project_name must not contain special characters.
@@ -37,7 +51,7 @@ mkdir $project_name
 cd $project_name || exit
 
 git init
-git pull git@github.com:mobify/astro-scaffold.git 0.6.0 --depth 1
+git pull git@github.com:mobify/astro-scaffold.git 0.7.0 --depth 1
 
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     rm -rf circle.yml
@@ -86,15 +100,7 @@ egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$proj
 # Update symlink to "scaffold-www" folder in android/assets
 ln -sfn ../../../../../app/$project_name-www/ android/$project_name/src/main/assets/$project_name-www
 
-# Grab the commit ref for that submodule.
-commit=$(git ls-tree master | grep astro | awk '{ print $3; }')
-
-# Blow away the astro submodule, and the history, then re-initialize git
-rm -rf .git astro
 git init
-git submodule add --force git@github.com:mobify/astro.git astro
-cd astro
-git checkout $commit
-cd ..
 git add .
 git commit -am 'Your first Astro commit - AMAZING! 🌟 👍🏽'
+npm install
