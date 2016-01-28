@@ -68,9 +68,12 @@ WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
 echo "Working directory: $WORKING_DIR"
 trap 'rm -rf "$WORKING_DIR"' EXIT
 curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
+ls "$WORKING_DIR"
 cd $WORKING_DIR || exit
 unzip "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
+ls "$WORKING_DIR"
 cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION" "$project_dir"
+ls "$project_dir"
 
 cd "$project_dir"
 set +x
