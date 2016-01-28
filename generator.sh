@@ -59,11 +59,11 @@ git init
 
 # Download the scaffold and copy it into the project directory
 WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
-print "Working directory: $WORKING_DIR"
+echo "Working directory: $WORKING_DIR"
 trap 'rm -rf "$WORKING_DIR"' EXIT
 curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
 unzip "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip" -d "$WORKING_DIR"
-cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION/*" .
+cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION" .
 
 # Set up CI support
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
