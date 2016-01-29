@@ -64,7 +64,6 @@ git init
 
 # Download the scaffold and copy it into the project directory
 WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
-echo "Working directory: $WORKING_DIR"
 trap 'rm -rf "$WORKING_DIR"' EXIT
 
 curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
