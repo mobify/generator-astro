@@ -26,7 +26,7 @@ fi
 
 read -p'--> What is the name of your project? ' project_name
 # $project_name must not contain special characters.
-project_name=$(echo $project_name | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
+project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
 
 read -p"--> Continue with the project name '$project_name'? (y/n) " -n 1 -r
 echo
@@ -34,8 +34,11 @@ if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
 fi
 
-read -p'--> On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
+# Currently we do nothing with 'app_scheme' so we won't prompt for it right now
+# read -p'--> On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
+
 read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
+
 read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
 
 ios_ci_support=0
@@ -67,11 +70,11 @@ WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
 trap 'rm -rf "$WORKING_DIR"' EXIT
 
 curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
-cd $WORKING_DIR || exit
+cd "$WORKING_DIR" || exit
 unzip -q "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
 cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION/" "$project_dir"
 
-cd "$project_dir"
+cd "$project_dir" || exit
 
 # Set up CI support
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
@@ -119,7 +122,7 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
 
 # Update symlink to "scaffold-www" folder in android/assets
-ln -sfn ../../../../../app/$project_name-www/ android/$project_name/src/main/assets/$project_name-www
+ln -sfn ../../../../../app/"$project_name"-www/ android/"$project_name"/src/main/assets/"$project_name"-www
 
 git init
 git add .
