@@ -4,7 +4,7 @@ set -o pipefail
 MYDIR=$(pwd)
 ROOT=$MYDIR # In some scripts ROOT != MYDIR
 
-ASTRO_VERSION=0.7.0
+ASTRO_VERSION=0.7.1
 SCAFFOLD_VERSION=$ASTRO_VERSION
 SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION.zip"
 
