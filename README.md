@@ -1,16 +1,24 @@
+```
+   _       _             
+  /_\  ___| |_ _ __ ___  
+ //_\\/ __| __| '__/ _ \ 
+/  _  \__ \ |_| | | (_) |
+\_/ \_/___/\__|_|  \___/ 
+```
+
 Astro Generator
 ===============
 
-In order to generate an Astro project, run the following script:
-
-```sh
-./generate.sh
-```
-
-Or if you don't have the repo checked out:
+To generate an Astro project:
 
 ```sh
 bash <(curl -fsS https://raw.githubusercontent.com/mobify/generator-astro/master/generator.sh)
+```
+
+Or, if you have the repo checked out:
+
+```sh
+./generate.sh
 ```
 
 Why `generator-astro` and not `astro-generator`
