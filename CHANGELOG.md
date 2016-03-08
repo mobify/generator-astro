@@ -1,3 +1,7 @@
+v0.8.0
+=====
+- Update to point to latest version of Astro
+
 v0.7.1
 ======
 
