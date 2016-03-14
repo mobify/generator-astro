@@ -43,6 +43,7 @@ read -p"--> Which iOS Bundle Identifier and Android Package Name would you like 
 
 ios_ci_support=0
 android_ci_support=0
+ios_tab_layout="false"
 
 read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
@@ -56,6 +57,12 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     echo '    ↳ To setup Android continuous integration, see README.md.'
     android_ci_support=1
+fi
+
+read -p'--> On iOS, do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]] ; then
+    ios_tab_layout="true"
 fi
 
 # Prepare new project directory
@@ -123,6 +130,9 @@ egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$proj
 
 # Update symlink to "scaffold-www" folder in android/assets
 ln -sfn ../../../../../app/"$project_name"-www/ android/"$project_name"/src/main/assets/"$project_name"-www
+
+# Configure the ios layout
+egrep -lR "iosUsingTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/iosUsingTabLayout = false/iosUsingTabLayout = $ios_tab_layout/g" 2>/dev/null
 
 git init
 git add .
