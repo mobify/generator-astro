@@ -8,6 +8,15 @@ ASTRO_VERSION=0.8.0
 SCAFFOLD_VERSION=$ASTRO_VERSION
 SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION.zip"
 
+echo '                                '
+echo '        _       _               '
+echo '       /_\  ___| |_ _ __ ___    '
+echo '      //_\\/ __| __|  __/ _ \   '
+echo '     /  _  \__ \ |_| | | (_) |  '
+echo '     \_/ \_/___/\__|_|  \___/   '
+echo '                                '
+echo '                                '
+
 read -p"--> We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
