@@ -45,9 +45,16 @@ fi
 # Currently we do nothing with 'app_scheme' so we won't prompt for it right now
 # read -p'--> On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
 
-read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
+hostname = ""
+bundle_identifier = ""
 
-read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+while [ -z "$hostname" ]; do
+    read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
+done
+
+while [ -z "$bundle_identifier" ]; do
+    read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+done
 
 ios_ci_support=0
 android_ci_support=0
