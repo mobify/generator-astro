@@ -45,8 +45,8 @@ fi
 # Currently we do nothing with 'app_scheme' so we won't prompt for it right now
 # read -p'--> On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
 
-hostname = ""
-bundle_identifier = ""
+hostname=""
+bundle_identifier=""
 
 while [ -z "$hostname" ]; do
     read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
