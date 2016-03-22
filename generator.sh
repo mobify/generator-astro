@@ -4,8 +4,8 @@ set -o pipefail
 MYDIR=$(pwd)
 ROOT=$MYDIR # In some scripts ROOT != MYDIR
 
-SCAFFOLD_VERSION=0.8.0
-SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION.zip"
+SCAFFOLD_VERSION_OR_BRANCH=0.8.0
+SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION_OR_BRANCH.zip"
 
 echo '                                '
 echo '        _       _               '
@@ -91,10 +91,10 @@ git init
 WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
 trap 'rm -rf "$WORKING_DIR"' EXIT
 
-curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
+curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION_OR_BRANCH.zip"
 cd "$WORKING_DIR" || exit
-unzip -q "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
-cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION/" "$project_dir"
+unzip -q "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION_OR_BRANCH.zip"
+cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION_OR_BRANCH/" "$project_dir"
 
 cd "$project_dir" || exit
 
