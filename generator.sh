@@ -143,9 +143,6 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 # Replace "scaffold" with $project_name inside of files.
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
 
-# Update symlink to "scaffold-www" folder in android/assets
-ln -sfn ../../../../../app/"$project_name"-www/ android/"$project_name"/src/main/assets/"$project_name"-www
-
 # Configure the ios layout
 egrep -lR "iosUsingTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/iosUsingTabLayout = false/iosUsingTabLayout = $ios_tab_layout/g" 2>/dev/null
 
