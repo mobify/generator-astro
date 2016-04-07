@@ -4,9 +4,17 @@ set -o pipefail
 MYDIR=$(pwd)
 ROOT=$MYDIR # In some scripts ROOT != MYDIR
 
-ASTRO_VERSION=0.8.0
-SCAFFOLD_VERSION=$ASTRO_VERSION
-SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION.zip"
+SCAFFOLD_VERSION_OR_BRANCH=0.9.0
+SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION_OR_BRANCH.zip"
+
+echo '                                '
+echo '        _       _               '
+echo '       /_\  ___| |_ _ __ ___    '
+echo '      //_\\/ __| __|  __/ _ \   '
+echo '     /  _  \__ \ |_| | | (_) |  '
+echo '     \_/ \_/___/\__|_|  \___/   '
+echo '                                '
+echo '                                '
 
 read -p"--> We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
 echo
@@ -37,12 +45,20 @@ fi
 # Currently we do nothing with 'app_scheme' so we won't prompt for it right now
 # read -p'--> On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
 
-read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
+hostname=""
+bundle_identifier=""
 
-read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+while [ -z "$hostname" ]; do
+    read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
+done
+
+while [ -z "$bundle_identifier" ]; do
+    read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+done
 
 ios_ci_support=0
 android_ci_support=0
+ios_tab_layout="false"
 
 read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
@@ -58,6 +74,12 @@ if [[ $REPLY =~ ^[Yy]$ ]] ; then
     android_ci_support=1
 fi
 
+read -p'--> On iOS, do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]] ; then
+    ios_tab_layout="true"
+fi
+
 # Prepare new project directory
 project_dir="$ROOT/$project_name"
 echo "Setting up new project in $project_dir"
@@ -69,10 +91,10 @@ git init
 WORKING_DIR=$(mktemp -d /tmp/astro-scaffold.XXXXX)
 trap 'rm -rf "$WORKING_DIR"' EXIT
 
-curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
+curl --progress-bar -L "$SCAFFOLD_URL" -o "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION_OR_BRANCH.zip"
 cd "$WORKING_DIR" || exit
-unzip -q "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION.zip"
-cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION/" "$project_dir"
+unzip -q "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION_OR_BRANCH.zip"
+cp -R "$WORKING_DIR/astro-scaffold-$SCAFFOLD_VERSION_OR_BRANCH/" "$project_dir"
 
 cd "$project_dir" || exit
 
@@ -121,8 +143,8 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 # Replace "scaffold" with $project_name inside of files.
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
 
-# Update symlink to "scaffold-www" folder in android/assets
-ln -sfn ../../../../../app/"$project_name"-www/ android/"$project_name"/src/main/assets/"$project_name"-www
+# Configure the ios layout
+egrep -lR "iosUsingTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/iosUsingTabLayout = false/iosUsingTabLayout = $ios_tab_layout/g" 2>/dev/null
 
 git init
 git add .
