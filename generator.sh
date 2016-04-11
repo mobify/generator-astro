@@ -137,8 +137,15 @@ done
 egrep -lR "com\.mobify\.astro" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/com\.mobify\.astro\.\$(PRODUCT_NAME:rfc1034identifier)/$bundle_identifier/g" 2>/dev/null
 egrep -lR "com\.mobify\.astro" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/com\.mobify\.astro\.scaffold/$bundle_identifier/g" 2>/dev/null
 
+# Replace "com.mobify.astro" with $bundle_identifier inside of apple-app-site-association file
+egrep -lR "DEV_TEAM_ID.com.mobify.astro" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/DEV_TEAM_ID.com.mobify.astro/DEV_TEAM_ID.$bundle_identifier/g" 2>/dev/null
+
 # Replace "www.mobify.com" with $hostname inside of the AndroidManifest.
 egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/android:host=\"www.mobify.com\"/android:host=\"$hostname\"/g" 2>/dev/null
+
+# Replace "www.mobify.com" with $hostname inside of the ios entitlements file.
+egrep -lR "applinks:www.mobify.com" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/applinks:www.mobify.com/applinks:$hostname/g" 2>/dev/null
+
 
 # Replace "scaffold" with $project_name inside of files.
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
