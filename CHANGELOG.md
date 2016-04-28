@@ -1,6 +1,6 @@
-To be released:
-=====
--
+v0.10.1
+=======
+- Astro updated to support Android Studio 2.0
 
 v0.9.0
 =====
