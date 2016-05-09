@@ -34,7 +34,7 @@ fi
 
 read -p'--> What is the name of your project? ' project_name
 # $project_name must not contain special characters.
-project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
+project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]' | tr -d ' ')
 
 read -p"--> Continue with the project name '$project_name'? (y/n) " -n 1 -r
 echo
@@ -48,12 +48,27 @@ fi
 hostname=""
 bundle_identifier=""
 
+bundle_regex="^(\.?[a-zA-Z]+[0-9a-zA-Z]*)+$"
+
 while [ -z "$hostname" ]; do
     read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
 done
 
 while [ -z "$bundle_identifier" ]; do
     read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+
+    if [[ "$bundle_identifier" =~ $bundle_regex ]]; then
+        read -p"--> Continue with the iOS Bundle Identifier and Android Package Name $bundle_identifier? (y/n) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+            bundle_identifier=''
+        fi
+    else
+        bundle_identifier=''
+        echo 'Invalid package name'
+        echo 'The name may contain uppercase or lowercase letters ('A' through 'Z'), numbers, and underscores ('_').'
+        echo 'However, individual package name parts may only start with letters.'
+    fi
 done
 
 ios_ci_support=0
