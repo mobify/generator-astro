@@ -59,6 +59,7 @@ done
 ios_ci_support=0
 android_ci_support=0
 ios_tab_layout="false"
+buddybuild_support=0
 
 read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
@@ -78,6 +79,12 @@ read -p'--> On iOS, do you want to use a tab layout (otherwise a drawer layout w
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     ios_tab_layout="true"
+fi
+
+read -p "--> Do you want buddybuild support? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]] ; then
+    buddybuild_support=1
 fi
 
 # Prepare new project directory
@@ -119,6 +126,10 @@ else
         rm circle/config/mobify-qa-android
         sed -i '' '/^## ANDROID_BEGIN$/,/^## ANDROID_END$/d' circle.yml
     fi
+fi
+
+if [ $buddybuild_support -ne 1 ]; then
+    rm buddybuild_postclone.sh
 fi
 
 # Replace scaffold in the names of different files and folders with $project_name.
