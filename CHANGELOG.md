@@ -1,7 +1,5 @@
 ## To be released
-=======
 - Add support for buddybuild
-
 
 ## v0.10.1
 - Astro updated to support Android Studio 2.0
