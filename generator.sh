@@ -65,9 +65,9 @@ while [ -z "$bundle_identifier" ]; do
         fi
     else
         bundle_identifier=''
-        echo '--> Invalid package name'
-        echo '--> The name may contain uppercase or lowercase letters ('A' through 'Z'), numbers, and underscores ('_').'
-        echo '--> However, individual package name parts may only start with letters.'
+        echo '      Invalid package name'
+        echo '      The name may contain uppercase or lowercase letters ('A' through 'Z'), numbers, and underscores ('_').'
+        echo '      However, individual package name parts may only start with letters.'
     fi
 done
 
