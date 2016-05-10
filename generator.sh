@@ -48,7 +48,7 @@ fi
 hostname=""
 bundle_identifier=""
 
-bundle_regex="^[a-zA-Z]+(\.?[a-zA-Z]+[0-9a-zA-Z]*)+$"
+bundle_regex="^[a-zA-Z]+(\.?[a-zA-Z]+[0-9a-zA-Z\_]*)+$"
 
 while [ -z "$hostname" ]; do
     read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
