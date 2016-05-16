@@ -90,16 +90,20 @@ if [[ $REPLY =~ ^[Yy]$ ]] ; then
     android_ci_support=1
 fi
 
+if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
+    echo '    ↳ Skipping buddybuild integration because continuous integration was not included'
+else
+    read -p "--> Do you want buddybuild support? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]] ; then
+        buddybuild_support=1
+    fi
+fi
+
 read -p'--> On iOS, do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     ios_tab_layout="true"
-fi
-
-read -p "--> Do you want buddybuild support? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    buddybuild_support=1
 fi
 
 # Prepare new project directory
