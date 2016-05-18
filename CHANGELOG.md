@@ -1,4 +1,4 @@
-## To be released
+## v0.10.3
 - Add support for buddybuild
 - Validate bundle identifier
 
