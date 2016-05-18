@@ -4,7 +4,7 @@ set -o pipefail
 MYDIR=$(pwd)
 ROOT=$MYDIR # In some scripts ROOT != MYDIR
 
-SCAFFOLD_VERSION_OR_BRANCH=0.10.1
+SCAFFOLD_VERSION_OR_BRANCH=0.10.3
 SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION_OR_BRANCH.zip"
 
 echo '                                '
@@ -34,7 +34,7 @@ fi
 
 read -p'--> What is the name of your project? ' project_name
 # $project_name must not contain special characters.
-project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]')
+project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]' | tr -d ' ')
 
 read -p"--> Continue with the project name '$project_name'? (y/n) " -n 1 -r
 echo
@@ -48,17 +48,33 @@ fi
 hostname=""
 bundle_identifier=""
 
+bundle_regex="^[a-zA-Z]+(\.?[a-zA-Z]+\w*)+$"
+
 while [ -z "$hostname" ]; do
     read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
 done
 
 while [ -z "$bundle_identifier" ]; do
     read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+
+    if [[ "$bundle_identifier" =~ $bundle_regex ]]; then
+        read -p"--> Continue with the iOS Bundle Identifier and Android Package Name $bundle_identifier? (y/n) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+            bundle_identifier=''
+        fi
+    else
+        bundle_identifier=''
+        echo '      Invalid package name'
+        echo '      The name may contain uppercase or lowercase letters ('A' through 'Z'), numbers, and underscores ('_').'
+        echo '      However, individual package name parts may only start with letters.'
+    fi
 done
 
 ios_ci_support=0
 android_ci_support=0
 ios_tab_layout="false"
+buddybuild_support=0
 
 read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
@@ -72,6 +88,16 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     echo '    ↳ To setup Android continuous integration, see README.md.'
     android_ci_support=1
+fi
+
+if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
+    echo '    ↳ Skipping buddybuild integration because continuous integration was not included'
+else
+    read -p "--> Do you want buddybuild support? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]] ; then
+        buddybuild_support=1
+    fi
 fi
 
 read -p'--> On iOS, do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
@@ -119,6 +145,10 @@ else
         rm circle/config/mobify-qa-android
         sed -i '' '/^## ANDROID_BEGIN$/,/^## ANDROID_END$/d' circle.yml
     fi
+fi
+
+if [ $buddybuild_support -ne 1 ]; then
+    rm buddybuild_postclone.sh
 fi
 
 # Replace scaffold in the names of different files and folders with $project_name.
