@@ -73,7 +73,7 @@ done
 
 ios_ci_support=0
 android_ci_support=0
-ios_tab_layout="false"
+tab_layout="false"
 buddybuild_support=0
 
 read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
@@ -100,10 +100,10 @@ else
     fi
 fi
 
-read -p'--> On iOS, do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
+read -p'--> Do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    ios_tab_layout="true"
+    tab_layout="true"
 fi
 
 # Prepare new project directory
@@ -173,8 +173,8 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 # Replace "scaffold" with $project_name inside of files.
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
 
-# Configure the ios layout
-egrep -lR "iosUsingTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/iosUsingTabLayout = false/iosUsingTabLayout = $ios_tab_layout/g" 2>/dev/null
+# Configure the navigation layout
+egrep -lR "useTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/useTabLayout = false/useTabLayout = $tab_layout/g" 2>/dev/null
 
 git init
 git add .
