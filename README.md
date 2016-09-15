@@ -9,6 +9,14 @@
 Astro Generator
 ===============
 
+## Requirements
+
+- [Git](https://git-scm.com/)
+- We recommend you use [nvm](https://github.com/creationix/nvm#installation) to
+manage node and npm versions.
+- node ^4.0.0 LTS
+- npm ^2.0.0
+
 To generate an Astro project:
 
 ```sh
