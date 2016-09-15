@@ -22,7 +22,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
 fi
 
-curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/develop/LICENSE
+curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/master/LICENSE
 trap 'rm -f LICENSE' EXIT
 less LICENSE
 
