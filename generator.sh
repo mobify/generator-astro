@@ -4,7 +4,7 @@ set -o pipefail
 MYDIR=$(pwd)
 ROOT=$MYDIR # In some scripts ROOT != MYDIR
 
-SCAFFOLD_VERSION_OR_BRANCH=0.13.0
+SCAFFOLD_VERSION_OR_BRANCH=master
 SCAFFOLD_URL="https://github.com/mobify/astro-scaffold/archive/$SCAFFOLD_VERSION_OR_BRANCH.zip"
 
 echo '                                '
@@ -22,7 +22,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
 fi
 
-curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/develop/LICENSE
+curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/master/LICENSE
 trap 'rm -f LICENSE' EXIT
 less LICENSE
 
