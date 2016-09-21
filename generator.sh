@@ -16,7 +16,7 @@ echo '     \_/ \_/___/\__|_|  \___/   '
 echo '                                '
 echo '                                '
 
-read -p"--> We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
+read -p"⟶ We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
@@ -26,24 +26,24 @@ curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/master/LI
 trap 'rm -f LICENSE' EXIT
 less LICENSE
 
-read -p"--> I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
+read -p"⟶ I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
 fi
 
-read -p'--> What is the name of your project? ' project_name
+read -p'⟶ What is the name of your project? ' project_name
 # $project_name must not contain special characters.
 project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]' | tr -d ' ')
 
-read -p"--> Continue with the project name '$project_name'? (y/n) " -n 1 -r
+read -p"⟶ Continue with the project name '$project_name'? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     exit 1
 fi
 
 # Currently we do nothing with 'app_scheme' so we won't prompt for it right now
-# read -p'--> On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
+# read -p'⟶ On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
 
 hostname=""
 bundle_identifier=""
@@ -51,14 +51,14 @@ bundle_identifier=""
 bundle_regex="^[a-zA-Z]+(\.?[a-zA-Z]+\w*)+$"
 
 while [ -z "$hostname" ]; do
-    read -p'--> On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
+    read -p'⟶ On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
 done
 
 while [ -z "$bundle_identifier" ]; do
-    read -p"--> Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+    read -p"⟶ Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
 
     if [[ "$bundle_identifier" =~ $bundle_regex ]]; then
-        read -p"--> Continue with the iOS Bundle Identifier and Android Package Name $bundle_identifier? (y/n) " -n 1 -r
+        read -p"⟶ Continue with the iOS Bundle Identifier and Android Package Name $bundle_identifier? (y/n) " -n 1 -r
         echo
         if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
             bundle_identifier=''
@@ -73,17 +73,19 @@ done
 
 ios_ci_support=0
 android_ci_support=0
-tab_layout="false"
 buddybuild_support=0
+enable_preview="false"
+tab_layout="false"
+project_type="adaptive.js"
 
-read -p'--> On iOS, do you want continuous integration? (y/n) ' -n 1 -r
+read -p'⟶ On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     echo '    ↳ To setup iOS continuous integration, see README.md.'
     ios_ci_support=1
 fi
 
-read -p "--> On Android, do you want continuous integration? (y/n) " -n 1 -r
+read -p "⟶ On Android, do you want continuous integration? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     echo '    ↳ To setup Android continuous integration, see README.md.'
@@ -93,14 +95,33 @@ fi
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
     echo '    ↳ Skipping buddybuild integration because continuous integration was not included'
 else
-    read -p "--> Do you want buddybuild support? (y/n) " -n 1 -r
+    read -p "⟶ Do you want buddybuild support? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] ; then
         buddybuild_support=1
     fi
 fi
 
-read -p'--> Do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
+read -p'⟶ Is this a Mobify project? (y/n) ' -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+    echo '    ↳ Skipping Mobify preview setup because it is not a Mobify project'
+else
+    read -p '⟶ Do you want to enable Mobify preview? (y/n) ' -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+        echo '    ↳ To setup Mobify preview, see README.md.'
+    else
+        enable_preview="true"
+        read -p '⟶ Is this an Adaptive.js project (otherwise a mobify.js project will be assumed)? (y/n) ' -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+            project_type="mobify.js"
+        fi
+    fi
+fi
+
+read -p'⟶ Do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     tab_layout="true"
@@ -172,6 +193,10 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 
 # Replace "scaffold" with $project_name inside of files.
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
+
+# Configure preview plugin
+egrep -lR "useAppPreview = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/useAppPreview = false/useAppPreview = $enable_preview/g" 2>/dev/null
+egrep -lR "previewBundle = \'https:\/\/localhost:8443\/adaptive\.js\'" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/previewBundle = \'https:\/\/localhost:8443\/adaptive\.js\'/previewBundle = \'https:\/\/localhost:8443\/$project_type\'/g" 2>/dev/null
 
 # Configure the navigation layout
 egrep -lR "useTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/useTabLayout = false/useTabLayout = $tab_layout/g" 2>/dev/null
