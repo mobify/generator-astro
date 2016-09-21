@@ -110,7 +110,7 @@ else
     read -p '⟶ Do you want to enable Mobify preview? (y/n) ' -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
-        echo '    ↳ To setup Mobify preview, see README.md.'
+        echo '    ↳ To enable Mobify preview, see README.md.'
     else
         enable_preview="true"
         read -p '⟶ Is this an Adaptive.js project (otherwise a mobify.js project will be assumed)? (y/n) ' -n 1 -r
@@ -195,8 +195,8 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
 
 # Configure preview plugin
-egrep -lR "useAppPreview = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/useAppPreview = false/useAppPreview = $enable_preview/g" 2>/dev/null
-egrep -lR "previewBundle = \'https:\/\/localhost:8443\/adaptive\.js\'" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/previewBundle = \'https:\/\/localhost:8443\/adaptive\.js\'/previewBundle = \'https:\/\/localhost:8443\/$project_type\'/g" 2>/dev/null
+egrep -lR "previewEnabled = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/previewEnabled = false/previewEnabled = $enable_preview/g" 2>/dev/null
+egrep -lR "previewBundle = \'<preview_bundle>\'" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/previewBundle = \'<preview_bundle>\'/previewBundle = \'https:\/\/localhost:8443\/$project_type\'/g" 2>/dev/null
 
 # Configure the navigation layout
 egrep -lR "useTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/useTabLayout = false/useTabLayout = $tab_layout/g" 2>/dev/null
