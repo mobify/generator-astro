@@ -1,3 +1,6 @@
+## To be released
+- Add support for tab navigation on Android
+
 ## v0.10.3
 - Add support for buddybuild
 - Validate bundle identifier
