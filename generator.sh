@@ -114,7 +114,6 @@ else
     echo "➞ What type of project is this?"
     echo "    1. Mobify.js (legacy)"
     echo "    2. Adaptive.js (legacy)"
-    echo "    3. Progressive web"
 
     while [ ! "$REPLY" ]; do
         read -p '    Choices (1, 2, 3): ' -n 1 -r
@@ -127,10 +126,6 @@ else
         2)
             echo "  ↳ Setting project type to Adaptive.js (legacy)"
             project_type="adaptive.js"
-            ;;
-        3)
-            echo "  ↳ Setting project type to Progressive Web"
-            project_type="loader.js"
             ;;
         *)
             REPLY=
