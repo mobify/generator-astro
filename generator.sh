@@ -116,7 +116,7 @@ else
     echo "    2. Adaptive.js (legacy)"
 
     while [ ! "$REPLY" ]; do
-        read -p '    Choices (1, 2, 3): ' -n 1 -r
+        read -p '    Choices (1 or 2): ' -n 1 -r
         echo
         case $REPLY in 
         1)
@@ -129,7 +129,7 @@ else
             ;;
         *)
             REPLY=
-            echo "!! Invalid selection: '$REPLY'. Please enter 1, 2, or 3."
+            echo "    !! Invalid selection: '$REPLY'. Please enter 1, 2, or 3."
             ;;
         esac
     done
