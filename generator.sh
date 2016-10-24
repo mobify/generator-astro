@@ -16,34 +16,35 @@ echo '     \_/ \_/___/\__|_|  \___/   '
 echo '                                '
 echo '                                '
 
-read -p"⟶ We have a license you must read and agree to. Read license? (y/n) " -n 1 -r
+read -p "➞ Press any key to review the Astro license..." -n 1 -r
 echo
-if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
-    exit 1
-fi
 
 curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/master/LICENSE
 trap 'rm -f LICENSE' EXIT
 less LICENSE
 
-read -p"⟶ I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
+read -p"➞ I have read, understand, and accept the terms and conditions stated in the license above. (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+    echo "  ↳ License rejected. Aborting..."
     exit 1
+else
+    echo "  ↳ License accepted. Continuing..."
 fi
 
-read -p'⟶ What is the name of your project? ' project_name
+read -p'➞ What is the name of your project? ' project_name
 # $project_name must not contain special characters.
 project_name=$(echo "$project_name" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]' | tr -d ' ')
 
-read -p"⟶ Continue with the project name '$project_name'? (y/n) " -n 1 -r
+read -p"  ↳ Continue with the project name '$project_name'? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+    echo "  ↳ Aborting..."
     exit 1
 fi
 
 # Currently we do nothing with 'app_scheme' so we won't prompt for it right now
-# read -p'⟶ On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
+# read -p'➞ On iOS, which app scheme do you want for deep linking? (eg. mobify) ' app_scheme
 
 hostname=""
 bundle_identifier=""
@@ -51,14 +52,14 @@ bundle_identifier=""
 bundle_regex="^[a-zA-Z]+(\.?[a-zA-Z]+\w*)+$"
 
 while [ -z "$hostname" ]; do
-    read -p'⟶ On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
+    read -p'➞ On Android, which host would you like to use for deep linking? (eg. www.mobify.com) ' hostname
 done
 
 while [ -z "$bundle_identifier" ]; do
-    read -p"⟶ Which iOS Bundle Identifier and Android Package Name would you like to use? Begin with 'com.mobify.' to use HockeyApp. (eg. com.mobify.app) " bundle_identifier
+    read -p"➞ Which iOS Bundle Identifier and Android Package Name would you like to use? (eg. com.mobify.build.app) " bundle_identifier
 
     if [[ "$bundle_identifier" =~ $bundle_regex ]]; then
-        read -p"⟶ Continue with the iOS Bundle Identifier and Android Package Name $bundle_identifier? (y/n) " -n 1 -r
+        read -p"  ↳ Continue with the iOS Bundle Identifier and Android Package Name $bundle_identifier? (y/n) " -n 1 -r
         echo
         if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
             bundle_identifier=''
@@ -78,54 +79,77 @@ enable_preview="false"
 tab_layout="false"
 project_type="adaptive.js"
 
-read -p'⟶ On iOS, do you want continuous integration? (y/n) ' -n 1 -r
+read -p'➞ On iOS, do you want continuous integration? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    echo '    ↳ To setup iOS continuous integration, see README.md.'
+    echo '  ↳ To setup iOS continuous integration, see README.md.'
     ios_ci_support=1
 fi
 
-read -p "⟶ On Android, do you want continuous integration? (y/n) " -n 1 -r
+read -p "➞ On Android, do you want continuous integration? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-    echo '    ↳ To setup Android continuous integration, see README.md.'
+    echo '  ↳ To setup Android continuous integration, see README.md.'
     android_ci_support=1
 fi
 
 if [[ $ios_ci_support -ne 1 && $android_ci_support -ne 1 ]]; then
-    echo '    ↳ Skipping buddybuild integration because continuous integration was not included'
+    echo '  ↳ Skipping buddybuild integration because continuous integration was not included'
 else
-    read -p "⟶ Do you want buddybuild support? (y/n) " -n 1 -r
+    read -p "➞ Do you want buddybuild support? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]] ; then
         buddybuild_support=1
     fi
 fi
 
-read -p'⟶ Is this a Mobify project? (y/n) ' -n 1 -r
+read -p '➞ Do you want to enable Mobify preview? (y/n) ' -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
-    echo '    ↳ Skipping Mobify preview setup because it is not a Mobify project'
+    echo '  ↳ To enable Mobify preview later, see README.md.'
 else
-    read -p '⟶ Do you want to enable Mobify preview? (y/n) ' -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
-        echo '    ↳ To enable Mobify preview, see README.md.'
-    else
-        enable_preview="true"
-        read -p '⟶ Is this an Adaptive.js project (otherwise a mobify.js project will be assumed)? (y/n) ' -n 1 -r
+    REPLY=
+    enable_preview="true"
+    
+    echo "➞ What type of project is this?"
+    echo "    1. Mobify.js (legacy)"
+    echo "    2. Adaptive.js (legacy)"
+    echo "    3. Progressive web"
+
+    while [ ! "$REPLY" ]; do
+        read -p '    Choices (1, 2, 3): ' -n 1 -r
         echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
+        case $REPLY in 
+        1)
+            echo "  ↳ Setting project type to Mobify.js (legacy)"
             project_type="mobify.js"
-        fi
-    fi
+            ;;
+        2)
+            echo "  ↳ Setting project type to Adaptive.js (legacy)"
+            project_type="adaptive.js"
+            ;;
+        3)
+            echo "  ↳ Setting project type to Progressive Web"
+            project_type="loader.js"
+            ;;
+        *)
+            REPLY=
+            echo "!! Invalid selection: '$REPLY'. Please enter 1, 2, or 3."
+            ;;
+        esac
+    done
 fi
 
-read -p'⟶ Do you want to use a tab layout (otherwise a drawer layout will be setup)? (y/n) ' -n 1 -r
+read -p'➞ Do you want to use a tab layout (otherwise a drawer layout will be used)? (y/n) ' -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
     tab_layout="true"
 fi
+
+echo 
+echo
+
+# ******************* END OF QUESTIONS / START GENERATING ******************* #
 
 # Prepare new project directory
 project_dir="$ROOT/$project_name"
