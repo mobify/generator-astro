@@ -1,4 +1,5 @@
 ## To be released
+- Add support for Mobify preview setup
 - Add support for tab navigation on Android
 
 ## v0.10.3
