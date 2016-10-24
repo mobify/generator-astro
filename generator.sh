@@ -16,7 +16,7 @@ echo '     \_/ \_/___/\__|_|  \___/   '
 echo '                                '
 echo '                                '
 
-read -p "➞ Press any key to review the Astro license..." -n 1 -r
+read -p"➞ Press any key to review the Astro license..." -n 1 -r
 echo
 
 curl -s -O -L https://raw.githubusercontent.com/mobify/generator-astro/master/LICENSE
