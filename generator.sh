@@ -75,7 +75,6 @@ done
 ios_ci_support=0
 android_ci_support=0
 buddybuild_support=0
-enable_preview="false"
 tab_layout="false"
 project_type="adaptive.js"
 
@@ -109,8 +108,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]] ; then
     echo '  ↳ To enable Mobify preview later, see README.md.'
 else
     REPLY=
-    enable_preview="true"
-    
+
     echo "➞ What type of project is this?"
     echo "    1. Mobify.js (legacy)"
     echo "    2. Adaptive.js (legacy)"
@@ -118,7 +116,7 @@ else
     while [ ! "$REPLY" ]; do
         read -p '    Choices (1 or 2): ' -n 1 -r
         echo
-        case $REPLY in 
+        case $REPLY in
         1)
             echo "  ↳ Setting project type to Mobify.js (legacy)"
             project_type="mobify.js"
@@ -141,7 +139,7 @@ if [[ $REPLY =~ ^[Yy]$ ]] ; then
     tab_layout="true"
 fi
 
-echo 
+echo
 echo
 
 # ******************* END OF QUESTIONS / START GENERATING ******************* #
@@ -214,7 +212,6 @@ egrep -lR "android:host=\"www.mobify.com\"" . | tr '\n' '\0' | xargs -0 -n1 sed 
 egrep -lR "scaffold" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/scaffold/$project_name/g" 2>/dev/null
 
 # Configure preview plugin
-egrep -lR "previewEnabled = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/previewEnabled = false/previewEnabled = $enable_preview/g" 2>/dev/null
 egrep -lR "previewBundle = \'<preview_bundle>\'" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/previewBundle = \'<preview_bundle>\'/previewBundle = \'https:\/\/localhost:8443\/$project_type\'/g" 2>/dev/null
 
 # Configure the navigation layout
