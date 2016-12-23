@@ -220,4 +220,4 @@ egrep -lR "useTabLayout = false" . | tr '\n' '\0' | xargs -0 -n1 sed -i '' "s/us
 git init
 git add .
 git commit -am 'Your first Astro commit - AMAZING! 🌟 👍🏽'
-npm install
+npm run deps
